@@ -13,51 +13,73 @@
         body.dark-mode .header-bg { background-color: #181818; border-color: #333; }
         body.dark-mode .item-bg { background-color: #2a2a2a; border-color: #3d3d3d; }
 
-        body.light-mode { background-color: #f8f9fa; color: #1a1a1a; }
+        body.light-mode { background-color: #ffffff; color: #1a1a1a; }
         body.light-mode .card-bg { background-color: #ffffff; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         body.light-mode .header-bg { background-color: #ffffff; border-color: #e5e7eb; }
-        body.light-mode .item-bg { background-color: #f3f4f6; border-color: #e5e7eb; }
+        body.light-mode .item-bg { background-color: #f8f9fa; border-color: #e5e7eb; }
 
         .gold-btn { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: white; }
     </style>
 </head>
-<body class="dark-mode max-w-md mx-auto min-h-screen pb-24 relative border-x border-neutral-700/30">
+<body class="light-mode max-w-md mx-auto min-h-screen pb-24 relative border-x border-neutral-200 dark:border-neutral-700/30">
 
     <!-- 🚨 CUSTOM ALERT MODAL (แจ้งเตือนกลางจอภาษาของลูกค้า) -->
     <div id="alertModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="card-bg border-2 border-amber-500 w-full max-w-xs p-5 rounded-2xl text-center space-y-3 shadow-2xl animate-bounce-short">
             <div class="w-12 h-12 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl">⚠️</div>
             <h3 class="font-bold text-amber-500 text-sm" id="alertTitle">Notice / แจ้งเตือน</h3>
-            <p class="text-xs text-neutral-300 leading-relaxed" id="alertMsg">Please complete your order options.</p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed" id="alertMsg">Please complete your order options.</p>
             <button onclick="closeAlertModal()" class="w-full py-2.5 gold-btn font-bold text-xs rounded-xl active:scale-95">
                 OK / ตกลง
             </button>
         </div>
     </div>
 
-    <!-- 1. WELCOME SCREEN -->
-    <div id="welcomeScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto bg-neutral-900 text-white">
-        <div class="w-24 h-24 mb-4 rounded-full overflow-hidden border-2 border-amber-400 shadow-xl shadow-amber-900/40 flex items-center justify-center bg-black">
-    <img src="imming1.png" alt="เตี๋ยวแชมป์ลุงสม" class="w-full h-full object-cover">
-</div>
-        <h1 class="text-2xl font-bold text-amber-500">TEAW CHAMP LUNG SOM</h1>
-        <p class="text-xs text-gray-400 mb-6">เตี๋ยวแชมป์ลุงสม</p>
+    <!-- 🍜 MODAL เพิ่มสินค้าลงตะกร้าสำเร็จ (แจ้งเตือนถามลูกค้าเป็นภาษาที่เลือก) -->
+    <div id="addToCartSuccessModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="card-bg border-2 border-amber-500 w-full max-w-xs p-5 rounded-2xl text-center space-y-3 shadow-2xl">
+            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto text-2xl">✅</div>
+            <h3 class="font-bold text-amber-600 text-sm" id="cartModalTitle">Added to Cart!</h3>
+            <p class="text-xs font-semibold text-amber-500 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20" id="cartModalItemName">-</p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed" id="cartModalMsg">Would you like to order more or proceed to checkout?</p>
+            <div class="grid grid-cols-2 gap-2 pt-2">
+                <button onclick="closeCartSuccessModal()" class="py-2.5 bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-white font-bold text-xs rounded-xl active:scale-95" id="btn_continue_order">
+                    Order More
+                </button>
+                <button onclick="goToCheckoutFromModal()" class="py-2.5 gold-btn font-bold text-xs rounded-xl active:scale-95" id="btn_go_checkout">
+                    Checkout Now
+                </button>
+            </div>
+        </div>
+    </div>
 
-        <div class="w-full bg-neutral-800/90 p-5 rounded-2xl border border-amber-600/30 space-y-4">
-            <p class="text-xs font-semibold text-amber-400">
+    <!-- 1. WELCOME SCREEN (ปรับพื้นหลังเป็นสีขาว) -->
+    <div id="welcomeScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto bg-white text-neutral-800">
+        <div class="w-24 h-24 mb-4 rounded-full overflow-hidden border-2 border-amber-400 shadow-xl shadow-amber-500/20 flex items-center justify-center bg-amber-50">
+            <img src="imming1.png" alt="เตี๋ยวแชมป์ลุงสม" class="w-full h-full object-cover">
+        </div>
+        <h1 class="text-2xl font-bold text-amber-600">TEAW CHAMP LUNG SOM</h1>
+        <p class="text-xs text-neutral-500 mb-6">เตี๋ยวแชมป์ลุงสม</p>
+
+        <div class="w-full bg-neutral-50 p-5 rounded-2xl border border-amber-500/30 space-y-4 shadow-sm">
+            <p class="text-xs font-semibold text-amber-600">
                 🌐 Please Select Your Language<br>
-                <span class="text-[10px] text-gray-400 font-normal">กรุณาเลือกภาษาของคุณ</span>
+                <span class="text-[10px] text-neutral-500 font-normal">กรุณาเลือกภาษาของคุณ</span>
             </p>
 
             <div class="grid grid-cols-2 gap-2 text-xs text-left">
-                <button onclick="selectLanguage('en')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/gb.png" class="w-5 h-3.5 rounded object-cover shadow"> English</button>
-                <button onclick="selectLanguage('zh')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/cn.png" class="w-5 h-3.5 rounded object-cover shadow"> 中文</button>
-                <button onclick="selectLanguage('ja')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/jp.png" class="w-5 h-3.5 rounded object-cover shadow"> 日本語</button>
-                <button onclick="selectLanguage('ru')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/ru.png" class="w-5 h-3.5 rounded object-cover shadow"> Русский</button>
-                <button onclick="selectLanguage('ms')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/my.png" class="w-5 h-3.5 rounded object-cover shadow"> B. Melayu</button>
-                <button onclick="selectLanguage('vi')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/vn.png" class="w-5 h-3.5 rounded object-cover shadow"> T. Việt</button>
-                <button onclick="selectLanguage('my')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/mm.png" class="w-5 h-3.5 rounded object-cover shadow"> မြန်မာ</button>
-                <button onclick="selectLanguage('th')" class="p-3 bg-neutral-700 hover:bg-neutral-600 rounded-xl flex items-center gap-2.5"><img src="https://flagcdn.com/w40/th.png" class="w-5 h-3.5 rounded object-cover shadow"> ภาษาไทย</button>
+                <button onclick="selectLanguage('en')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/gb.png" class="w-5 h-3.5 rounded object-cover shadow"> English</button>
+                <button onclick="selectLanguage('zh')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/cn.png" class="w-5 h-3.5 rounded object-cover shadow"> 中文</button>
+		<button onclick="selectLanguage('ko')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/kr.png" class="w-5 h-3.5 rounded object-cover shadow"> 한국어</button>
+                <button onclick="selectLanguage('ja')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/jp.png" class="w-5 h-3.5 rounded object-cover shadow"> 日本語</button>
+                <button onclick="selectLanguage('ru')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/ru.png" class="w-5 h-3.5 rounded object-cover shadow"> Русский</button>
+                <button onclick="selectLanguage('ms')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/my.png" class="w-5 h-3.5 rounded object-cover shadow"> B. Melayu</button>
+                <button onclick="selectLanguage('vi')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/vn.png" class="w-5 h-3.5 rounded object-cover shadow"> T. Việt</button>
+                <button onclick="selectLanguage('my')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/mm.png" class="w-5 h-3.5 rounded object-cover shadow"> မြန်မာ</button>
+		<button onclick="selectLanguage('lo')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm">
+    <img src="https://flagcdn.com/w40/la.png" class="w-5 h-3.5 rounded object-cover shadow"> ພາສາລາວ
+</button>
+                <button onclick="selectLanguage('th')" class="p-3 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-200 rounded-xl flex items-center gap-2.5 shadow-sm"><img src="https://flagcdn.com/w40/th.png" class="w-5 h-3.5 rounded object-cover shadow"> ภาษาไทย</button>
             </div>
         </div>
     </div>
@@ -65,14 +87,14 @@
     <!-- HEADER -->
     <header class="p-4 header-bg border-b sticky top-0 z-40 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-    <div class="w-9 h-9 rounded-full overflow-hidden border border-amber-500/50 flex-shrink-0 bg-black">
-        <img src="imming1.png" alt="Logo" class="w-full h-full object-cover">
-    </div>
-    <div>
-        <h1 class="text-base font-bold text-amber-600">TEAW CHAMP LUNG SOM</h1>
-        <p class="text-[10px] opacity-70">เตี๋ยวแชมป์ลุงสม</p>
-    </div>
-</div>
+            <div class="w-9 h-9 rounded-full overflow-hidden border border-amber-500/50 flex-shrink-0 bg-black">
+                <img src="imming1.png" alt="Logo" class="w-full h-full object-cover">
+            </div>
+            <div>
+                <h1 class="text-base font-bold text-amber-600">TEAW CHAMP LUNG SOM</h1>
+                <p class="text-[10px] opacity-70">เตี๋ยวแชมป์ลุงสม</p>
+            </div>
+        </div>
         <div class="flex items-center gap-2">
             <button onclick="toggleTheme()" class="px-2.5 py-1 bg-neutral-200 dark:bg-neutral-800 rounded-full text-xs font-bold border border-amber-500/30">
                 <span id="themeIcon">☀️</span>
@@ -297,7 +319,7 @@
         let currentLang = 'en';
         let cart = [];
 
-        // 👉 ใส่ URL Webhook จาก LINE Notify หรือ Google Apps Script ตรงนี้เพื่อเชื่อมต่อ LINE
+        // 👉 URL Webhook จาก Google Apps Script เพื่อส่งเตือนเข้า LINE
         const LINE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyxITcTdGbi43L6n5-z15mNTvCZASWYzmlR6rM1fEpGedwZiuwI9mOq0qyCiNYfGiJl/exec";
 
         const langMeta = {
@@ -308,6 +330,8 @@
             ms: { name: 'BM', flag: 'https://flagcdn.com/w40/my.png', rate: 0.13, symbol: 'MYR RM' },
             vi: { name: 'VN', flag: 'https://flagcdn.com/w40/vn.png', rate: 710.0, symbol: 'VND ₫' },
             my: { name: 'MM', flag: 'https://flagcdn.com/w40/mm.png', rate: 58.0, symbol: 'MMK K' },
+	        ko: { name: '한국어', flag: 'https://flagcdn.com/w40/kr.png', rate: 38.0, symbol: 'KRW ₩' },
+	        lo: { name: 'ລາວ', flag: 'https://flagcdn.com/w40/la.png', rate: 600.0, symbol: 'LAK ₭' },
             th: { name: 'ไทย', flag: 'https://flagcdn.com/w40/th.png', rate: 1.0, symbol: 'THB ฿' }
         };
 
@@ -328,8 +352,11 @@
                 hint_select: "⚠️ Please select 1 option", hint_opt: "Optional customization",
                 err_soup: "Please select a soup base!", err_noodle: "Please select a noodle type!",
                 err_topping: "Please select topping/meat!", err_size: "Please select portion size!",
-                err_cart_empty: "Your cart is empty! Please add a noodle bowl first."
+                err_cart_empty: "Your cart is empty! Please add a noodle bowl first.",
+                cart_added_title: "Added to Cart!", cart_added_msg: "Would you like to order more items or proceed to checkout?",
+                btn_continue: "Order More", btn_checkout_now: "Checkout Now"
             },
+
             zh: {
                 soup: "选择汤底", noodle: "选择面条", veg: "蔬菜与特殊要求", topping: "选择配料",
                 size: "份量", add_bowl: "加入购物车", cart_title: "您的购物车", items: "件", checkout: "去结算",
@@ -346,8 +373,30 @@
                 hint_select: "⚠️ 请选择 1 个选项", hint_opt: "可选的自定义项",
                 err_soup: "请选择汤底！", err_noodle: "请选择面条类型！",
                 err_topping: "请选择配料/肉类！", err_size: "请选择份量！",
-                err_cart_empty: "您的购物车是空的！请先选择一碗面。"
+                err_cart_empty: "您的购物车是空的！请先选择一碗面。",
+                cart_added_title: "已加入购物车！", cart_added_msg: "您想继续点餐还是去结算？",
+                btn_continue: "继续点餐", btn_checkout_now: "去结算"
             },
+		ko: {
+    soup: "육수/국물 เลือก", noodle: "면 เลือก", veg: "야채 및 제외 항목", topping: "토핑 เลือก",
+    size: "크기", add_bowl: "장바구니에 담기", cart_title: "장바구니", items: "개", checkout: "주문하기",
+    modal_title: "주문 옵션", dine: "식사 방식", pay: "결제 방법", confirm_final: "주문 확정",
+    s1: "맑은 국물", s2: "진한 국물 (Nam Tok)", s3: "비빔면", s4: "면 없음 (국물만)",
+    n1: "얇은 쌀국수", n2: "버미셀리 (실쌀국수)", n3: "넓은 쌀국수", n4: "에그누들 (บะหมี่)", n5: "당면", n6: "라면 (Instant)",
+    spinach: "모닝글로리 (공심채)", sprouts: "숙주나물", no_title: "제외할 항목:",
+    no_garlic: "마늘 오일 빼기", no_coriander: "고수 빼기", no_pepper: "후추 빼기",
+    t1: "돼지고기 완자", t2: "소고기 완자", t3: "소힘줄 완자", t4: "양념 돼지고기", t5: "돼지 완자 + 돼지고기", t6: "소 완자 + 돼지고기", t7: "모듬 토핑 (50฿)",
+    t8: "소힘줄 완자 + 돼지고기", t9: "모듬 소 완자 + 돼지고기",
+    reg: "보통 (40฿)", ext: "곱배기 (50฿)", in: "매장 식사", out: "포장 (Takeaway)", cash: "현금", qr: "PromptPay QR",
+    cust_summary: "👤 주문 내역", total_lbl: "총금액:", reset: "추가 주문하기",
+    staff_msg: "이 화면을 직원에게 보여주세요",
+    hint_select: "⚠️ 1가지 옵션을 선택해주세요", hint_opt: "추가 맞춤 설정",
+    err_soup: "육수를 선택해주세요!", err_noodle: "면 종류를 선택해주세요!",
+    err_topping: "토핑/고기를 선택해주세요!", err_size: "크기를 선택해주세요!",
+    err_cart_empty: "장바구니가 비어 있습니다! 먼저 국수를 선택해주세요.",
+    cart_added_title: "장바구니에 담겼습니다!", cart_added_msg: "추가로 주문하시겠습니까, 아니면 결제하시겠습니까?",
+    btn_continue: "추가 주문하기", btn_checkout_now: "바로 결제하기"
+},
             ja: {
                 soup: "スープの選択", noodle: "麺の選択", veg: "野菜・トッピング除外", topping: "具材の選択",
                 size: "サイズ", add_bowl: "カートに追加", cart_title: "カート", items: "点", checkout: "注文に進む",
@@ -364,7 +413,9 @@
                 hint_select: "⚠️ 1つのオプションを選択してください", hint_opt: "オプショナル設定",
                 err_soup: "スープを選択してください！", err_noodle: "麺の種類を選択してください！",
                 err_topping: "具材を選択してください！", err_size: "サイズを選択してください！",
-                err_cart_empty: "カートが空です！まず麺を選択してください。"
+                err_cart_empty: "カートが空です！まず麺を選択してください。",
+                cart_added_title: "カートに追加しました！", cart_added_msg: "さらに注文を続けますか？それともお会計に進みますか？",
+                btn_continue: "注文を続ける", btn_checkout_now: "お会計に進む"
             },
             ru: {
                 soup: "Выберите бульон", noodle: "Выберите лапшу", veg: "Овощи и исключения", topping: "Выберите добавки",
@@ -382,7 +433,9 @@
                 hint_select: "⚠️ Пожалуйста, выберите 1 вариант", hint_opt: "Дополнительные настройки",
                 err_soup: "Пожалуйста, выберите бульон!", err_noodle: "Пожалуйста, выберите лапшу!",
                 err_topping: "Пожалуйста, выберите добавку!", err_size: "Пожалуйста, выберите размер!",
-                err_cart_empty: "Ваша корзина пуста! Сначала добавьте порцию."
+                err_cart_empty: "Ваша корзина пуста! Сначала добавьте порцию.",
+                cart_added_title: "Добавлено в корзину!", cart_added_msg: "Хотите заказать что-нибудь еще или перейти к оформлению?",
+                btn_continue: "Заказать еще", btn_checkout_now: "Оформить заказ"
             },
             ms: {
                 soup: "Pilih Sup", noodle: "Pilih Mi", veg: "Sayur & Pilihan", topping: "Pilih Bahan",
@@ -400,7 +453,9 @@
                 hint_select: "⚠️ Sila pilih 1 pilihan", hint_opt: "Pilihan tambahan",
                 err_soup: "Sila pilih sup!", err_noodle: "Sila pilih mi!",
                 err_topping: "Sila pilih bahan/daging!", err_size: "Sila pilih saiz!",
-                err_cart_empty: "Troli anda kosong! Sila tambah mi dahulu."
+                err_cart_empty: "Troli anda kosong! Sila tambah mi dahulu.",
+                cart_added_title: "Ditambah ke Troli!", cart_added_msg: "Adakah anda ingin menambah pesanan atau terus ke pembayaran?",
+                btn_continue: "Tambah Pesanan", btn_checkout_now: "Bayar Sekarang"
             },
             vi: {
                 soup: "Chọn nước dùng", noodle: "Chọn loại mì", veg: "Rau & Yêu cầu", topping: "Chọn nhân",
@@ -418,7 +473,9 @@
                 hint_select: "⚠️ Vui lòng chọn 1 tùy chọn", hint_opt: "Tùy chỉnh bổ sung",
                 err_soup: "Vui lòng chọn nước dùng!", err_noodle: "Vui lòng chọn loại mì!",
                 err_topping: "Vui lòng chọn nhân/thịt!", err_size: "Vui lòng chọn kích thước!",
-                err_cart_empty: "Giỏ hàng trống! Vui lòng chọn món trước."
+                err_cart_empty: "Giỏ hàng trống! Vui lòng chọn món trước.",
+                cart_added_title: "Đã thêm vào giỏ hàng!", cart_added_msg: "Bạn muốn chọn thêm món hay tiến hành thanh toán?",
+                btn_continue: "Chọn thêm món", btn_checkout_now: "Thanh toán ngay"
             },
             my: {
                 soup: "ဟင်းရည်ရွေးပါ", noodle: "ခေါက်ဆွဲရွေးပါ", veg: "ဟင်းသီးဟင်းရွက်", topping: "အသားရွေးပါ",
@@ -436,8 +493,30 @@
                 hint_select: "⚠️ ၁ ခု ရွေးချယ်ပါ", hint_opt: "စိတ်ကြိုက် ထပ်မံရွေးချယ်နိုင်သည်",
                 err_soup: "ကျေးဇူးပြု၍ ဟင်းရည် ရွေးပါ!", err_noodle: "ကျေးဇူးပြု၍ ခေါက်ဆွဲ ရွေးပါ!",
                 err_topping: "ကျေးဇူးပြု၍ အသား ရွေးပါ!", err_size: "ကျေးဇူးပြု၍ အရွယ်အစား ရွေးပါ!",
-                err_cart_empty: "စျေးဝယ်ခြင်း လွတ်နေပါသည်! ပထမဦးစွာ ခေါက်ဆွဲ ရွေးပါ။"
+                err_cart_empty: "စျေးဝယ်ခြင်း လွတ်နေပါသည်! ပထမဦးစွာ ခေါက်ဆွဲ ရွေးပါ။",
+                cart_added_title: "ခြင်းထဲသို့ ထည့်ပြီးပါပြီ!", cart_added_msg: "ထပ်မံ မှာယူလိုပါသလား သို့မဟုတ် ငွေပေးချေမှုသို့ ဆက်သွားမလား?",
+                btn_continue: "ထပ်မံ မှာယူမည်", btn_checkout_now: "ငွေပေးချေမည်"
             },
+	lo: {
+    soup: "ເລືອກນ້ຳຊຸບ", noodle: "ເລືອກເສັ້ນ", veg: "ຜັກ ແລະ ຂໍ້ຫ້າມ", topping: "ເລືອກເຄື່ອງ",
+    size: "ຂະໜາດ", add_bowl: "ເພີ່ມລົງຕ່າກ້າ", cart_title: "ຕ່າກ້າຂອງທ່ານ", items: "ລາຍການ", checkout: "ສັ່ງຊື້",
+    modal_title: "ຕົວເລືອກການສັ່ງຊື້", dine: "ຮູບແບບ", pay: "ການຊຳລະເງິນ", confirm_final: "ຢືນຢັນການສົ່ງລາຍການ",
+    s1: "ນ້ຳໃສ", s2: "ນ້ຳຕົກ", s3: "ແຫ້ງ", s4: "ເກົາເຫຼົາ (ບໍ່ໃສ່ເສັ້ນ)",
+    n1: "ເສັ້ນເລັກ", n2: "ເສັ້ນໝີ່", n3: "ເສັ້ນໃຫຍ່", n4: "ບະໝີ່", n5: "ວຸ້ນເສັ້ນ", n6: "ມາມ່າ",
+    spinach: "ຜັກບຸ້ງ", sprouts: "ຖົ່ວງອກ", no_title: "ສິ່ງທີ່ບໍ່ໃສ່:",
+    no_garlic: "ບໍ່ໃສ່ນ້ຳມັນຈຽວ", no_coriander: "ບໍ່ໃສ່ຜັກຊີ", no_pepper: "ບໍ່ໃສ່ພິກໄທ",
+    t1: "ລູກຊິ້ນໝູ", t2: "ລູກຊິ້ນງົວ", t3: "ລູກຊິ້ນງົວເອັນ", t4: "ໝູໝັກ", t5: "ລູກຊິ້ນໝູ + ໝູໝັກ", t6: "ລູກຊິ້ນງົວ + ໝູໝັກ", t7: "ຮວມທຸກຢ່າງ (50฿)",
+    t8: "ລູກຊິ້ນເອັນງົວ + ໝູໝັກ", t9: "ລູກຊິ້ນງົວຮວມ + ໝູໝັກ",
+    reg: "ທຳມະດາ (40฿)", ext: "ພິເສດ (50฿)", in: "ກິນຢູ່ຮ້ານ (ໃສ່ຖ້ວຍ)", out: "ກັບບ້ານ (ໃສ່ຖົງ)", cash: "ເງິນສົດ", qr: "ໂອນພ້ອມເພ",
+    cust_summary: "👤 ສະຫຼຸບລາຍການຂອງທ່ານ", total_lbl: "ຍອດຮວມທັງໝົດ:", reset: "ສັ່ງເພີ່ມ ຫຼື ເຮັດລາຍການໃຫມ່",
+    staff_msg: "ກະລຸນາສະແດງໜ້າຈໍນີ້ໃຫ້ພໍ່ຄ້າ/ແມ່ຄ້າເບິ່ງ",
+    hint_select: "⚠️ ກະລຸນາຄລິກເລືອກ 1 ຢ່າງ", hint_opt: "ເລືອກຜັກ ແລະ ເພີ່ມເຕີມໄດ້ຕາມຊອບ",
+    err_soup: "ກະລຸນາເລືອກນ້ຳຊຸບກ່ອນ!", err_noodle: "ກະລຸນາເລືອກເສັ້ນກ່ອນ!",
+    err_topping: "ກະລຸນາເລືອກເຄື່ອງ/ເນື້ອສັດກ່ອນ!", err_size: "ກະລຸນາເລືອກຂະໜາດກ່ອນ!",
+    err_cart_empty: "ຕ່າກ້າຂອງທ່ານຍັງຫວ່າງຢູ່! ກະລຸນາກົດເລືອກກ໋ວຍເຕ໋ຽວກ່ອນ.",
+    cart_added_title: "ເພີ່ມລົງຕ່າກ້າແລ້ວ!", cart_added_msg: "ທ່ານຕ້ອງການເລືອກສັ່ງອາຫານເພີ່ມ ຫຼື ໄປທີ່ລາຍການສັ່ງຊື້ເລີຍ?",
+    btn_continue: "ສັ່ງອາຫານຕໍ່", btn_checkout_now: "ເບິ່ງຕ່າກ້າ / ສັ່ງເລີຍ"
+},
             th: {
                 soup: "เลือกน้ำซุป", noodle: "เลือกเส้น", veg: "ผักและเพิ่มเติม", topping: "เลือกเครื่อง",
                 size: "ขนาด", add_bowl: "เพิ่มลงตะกร้า", cart_title: "ตะกร้าของคุณ", items: "รายการ", checkout: "สั่งซื้อ",
@@ -454,7 +533,9 @@
                 hint_select: "⚠️ กรุณาคลิกเลือก 1 อย่าง", hint_opt: "เลือกผักและเพิ่มเติมได้ตามชอบ",
                 err_soup: "กรุณาเลือกน้ำซุปก่อนครับ!", err_noodle: "กรุณาเลือกเส้นก่อนครับ!",
                 err_topping: "กรุณาเลือกเครื่อง/เนื้อสัตว์ก่อนครับ!", err_size: "กรุณาเลือกขนาดก่อนครับ!",
-                err_cart_empty: "ตะกร้าของคุณยังว่างอยู่! กรุณากดเลือกก๋วยเตี๋ยวก่อนครับ"
+                err_cart_empty: "ตะกร้าของคุณยังว่างอยู่! กรุณากดเลือกก๋วยเตี๋ยวก่อนครับ",
+                cart_added_title: "เพิ่มลงในตะกร้าแล้ว!", cart_added_msg: "คุณต้องการเลือกสั่งอาหารเพิ่ม หรือไปที่รายการสั่งซื้อเลย?",
+                btn_continue: "สั่งอาหารต่อ", btn_checkout_now: "ดูตะกร้า / สั่งเลย"
             }
         };
 
@@ -550,6 +631,12 @@
             document.getElementById('opt_out').innerText = data.out;
             document.getElementById('pay_cash').innerText = data.cash;
             document.getElementById('pay_qr').innerText = data.qr;
+
+            // ข้อความ Modal ตะกร้า
+            document.getElementById('cartModalTitle').innerText = data.cart_added_title;
+            document.getElementById('cartModalMsg').innerText = data.cart_added_msg;
+            document.getElementById('btn_continue_order').innerText = data.btn_continue;
+            document.getElementById('btn_go_checkout').innerText = data.btn_checkout_now;
         }
 
         function handleSoupChange(isGaoLao) {
@@ -577,37 +664,37 @@
         }
 
         function getNativeTitle(item, lang) {
-            const langData = dict[lang] || dict['en'];
-            const isGaoLao = (item.rawSoup === "เกาเหลา");
+    const langData = dict[lang] || dict['en'];
+    const isGaoLao = (item.rawSoup === "เกาเหลา");
 
-            let nativeSoup = langData.s1;
-            if(item.rawSoup === "น้ำตก") nativeSoup = langData.s2;
-            if(item.rawSoup === "แห้ง") nativeSoup = langData.s3;
-            if(item.rawSoup === "เกาเหลา") nativeSoup = langData.s4;
+    let nativeSoup = langData.s1;
+    if(item.rawSoup === "น้ำตก") nativeSoup = langData.s2;
+    if(item.rawSoup === "แห้ง") nativeSoup = langData.s3;
+    if(item.rawSoup === "เกาเหลา") nativeSoup = langData.s4;
 
-            let nativeNoodle = "";
-            if(!isGaoLao) {
-                if(item.rawNoodle === "เส้นเล็ก") nativeNoodle = langData.n1;
-                if(item.rawNoodle === "เส้นหมี่") nativeNoodle = langData.n2;
-                if(item.rawNoodle === "เส้นใหญ่") nativeNoodle = langData.n3;
-                if(item.rawNoodle === "บะหมี่") nativeNoodle = langData.n4;
-                if(item.rawNoodle === "วุ้นเส้น") nativeNoodle = langData.n5;
-                if(item.rawNoodle === "มาม่า") nativeNoodle = langData.n6;
-            }
+    let nativeNoodle = "";
+    if(!isGaoLao) {
+        if(item.rawNoodle === "เส้นเล็ก") nativeNoodle = langData.n1;
+        if(item.rawNoodle === "เส้นหมี่") nativeNoodle = langData.n2;
+        if(item.rawNoodle === "เส้นใหญ่") nativeNoodle = langData.n3;
+        if(item.rawNoodle === "บะหมี่") nativeNoodle = langData.n4;
+        if(item.rawNoodle === "วุ้นเส้น") nativeNoodle = langData.n5;
+        if(item.rawNoodle === "มาม่า") nativeNoodle = langData.n6;
+    }
 
-            let nativeTopping = item.rawTopping;
-            if(item.rawTopping === "ลูกชิ้นหมู") nativeTopping = langData.t1;
-            if(item.rawTopping === "ลูกชิ้นเนื้อ") nativeTopping = langData.t2;
-            if(item.rawTopping === "ลูกชิ้นเนื้อเอ็น") nativeTopping = langData.t3;
-            if(item.rawTopping === "หมูหมัก") nativeTopping = langData.t4;
-            if(item.rawTopping === "ลูกชิ้นหมู+หมูหมัก") nativeTopping = langData.t5;
-            if(item.rawTopping === "ลูกชิ้นเนื้อ+หมูหมัก") nativeTopping = langData.t6;
-            if(item.rawTopping === "รวมทุกอย่าง") nativeTopping = langData.t7;
-            if(item.rawTopping === "ลูกชิ้นเอ็นเนื้อ+หมูหมัก") nativeTopping = langData.t8;
-            if(item.rawTopping === "ลูกชิ้นเนื้อรวม+หมูหมัก") nativeTopping = langData.t9;
+    let nativeTopping = item.rawTopping;
+    if(item.rawTopping === "ลูกชิ้นหมู") nativeTopping = langData.t1;
+    if(item.rawTopping === "ลูกชิ้นเนื้อ") nativeTopping = langData.t2;
+    if(item.rawTopping === "ลูกชิ้นเนื้อเอ็น") nativeTopping = langData.t3;
+    if(item.rawTopping === "หมูหมัก") nativeTopping = langData.t4;
+    if(item.rawTopping === "ลูกชิ้นหมู+หมูหมัก") nativeTopping = langData.t5;
+    if(item.rawTopping === "ลูกชิ้นเนื้อ+หมูหมัก") nativeTopping = langData.t6;
+    if(item.rawTopping === "รวมทุกอย่าง") nativeTopping = langData.t7;
+    if(item.rawTopping === "ลูกชิ้นเอ็นเนื้อ+หมูหมัก") nativeTopping = langData.t8;
+    if(item.rawTopping === "ลูกชิ้นเนื้อรวม+หมูหมัก") nativeTopping = langData.t9;
 
-            return isGaoLao ? `${nativeSoup} (${nativeTopping})` : `${nativeNoodle} - ${nativeSoup} (${nativeTopping})`;
-        }
+    return isGaoLao ? `${nativeSoup} (${nativeTopping})` : `${nativeNoodle} - ${nativeSoup} (${nativeTopping})`;
+}
 
         function getNativeSize(price, lang) {
             const langData = dict[lang] || dict['en'];
@@ -666,7 +753,7 @@
             const thaiTitle = isGaoLao ? `เกาเหลา (${toppingVal})` : `${noodleVal} ${soupVal} (${toppingVal})`;
             const sizeText = sizeVal === 50 ? 'พิเศษ' : 'ธรรมดา';
 
-            cart.push({
+            const newItem = {
                 rawSoup: soupVal,
                 rawNoodle: noodleVal,
                 rawTopping: toppingVal,
@@ -675,10 +762,27 @@
                 price: sizeVal,
                 veg: veg.length > 0 ? veg.join("+") : "ไม่ใส่ผัก",
                 no: noList.join(", ")
-            });
+            };
+
+            cart.push(newItem);
 
             resetFormInputs();
             updateCartUI();
+
+            // 🍜 แสดง Modal เด้งบอกชื่อรายการเป็นภาษาของลูกค้า
+            const nativeTitle = getNativeTitle(newItem, currentLang);
+            const nativeSize = getNativeSize(sizeVal, currentLang);
+            document.getElementById('cartModalItemName').innerText = `🍜 ${nativeTitle} [${nativeSize}]`;
+            document.getElementById('addToCartSuccessModal').classList.remove('hidden');
+        }
+
+        function closeCartSuccessModal() {
+            document.getElementById('addToCartSuccessModal').classList.add('hidden');
+        }
+
+        function goToCheckoutFromModal() {
+            closeCartSuccessModal();
+            openCheckoutModal();
         }
 
         function resetFormInputs() {
@@ -784,32 +888,24 @@
             window.scrollTo(0, 0);
         }
 
-        // 1. ตรวจสอบว่าด้านบนสุดหรือนอกฟังก์ชันกำหนดตัวแปร URL ไว้ถูกต้องแล้ว
-const LINE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyt9iJPr_E5Z0-p-jC_tayCQx7zMyekr5E6Xx_N6D6txzee4o853kdkc5_hYq8uVT9TuQ/exec";
-
-// 📲 ฟังก์ชันยิงออเดอร์เข้า LINE Webhook
-function sendLineNotify(dine, pay, total) {
-    if (LINE_WEBHOOK_URL && LINE_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbyt9iJPr_E5Z0-p-jC_tayCQx7zMyekr5E6Xx_N6D6txzee4o853kdkc5_hYq8uVT9TuQ/exec") {
-        fetch(LINE_WEBHOOK_URL, {
-            method: 'POST',
-            // เปลี่ยน Header เป็น text/plain เพื่อเลี่ยงการติด CORS Preflight Block ใน Google Apps Script
-            headers: { 
-                'Content-Type': 'text/plain;charset=utf-8' 
-            },
-            body: JSON.stringify({
-                dine: dine,
-                pay: pay,
-                total: total,
-                items: cart
-            })
-        })
-        .then(res => res.json())
-        .then(data => console.log("LINE Send Success:", data))
-        .catch(err => console.log("LINE Send Error:", err));
-    } else {
-        console.log(" Error: ยังไม่ได้ใส่ LINE_WEBHOOK_URL");
-    }
-}
+        // 📲 ฟังก์ชันยิงออเดอร์เข้า LINE Webhook (ปรับแก้ text/plain ป้องกันการติด CORS Block)
+        function sendLineNotify(dine, pay, total) {
+            if(LINE_WEBHOOK_URL && LINE_WEBHOOK_URL !== "YOUR_LINE_WEBHOOK_URL_HERE") {
+                fetch(LINE_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        dine: dine,
+                        pay: pay,
+                        total: total,
+                        items: cart
+                    })
+                })
+                .then(res => res.json())
+                .then(data => console.log("LINE Notification Result:", data))
+                .catch(err => console.log("LINE Send Error:", err));
+            }
+        }
 
         function resetAll() {
             cart = [];
