@@ -784,21 +784,32 @@
             window.scrollTo(0, 0);
         }
 
-        // 📲 ฟังก์ชันยิงออเดอร์เข้า LINE Webhook
-        function sendLineNotify(dine, pay, total) {
-            if(LINE_WEBHOOK_URL && LINE_WEBHOOK_URL !== "YOUR_LINE_WEBHOOK_URL_HERE") {
-                fetch(LINE_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        dine: dine,
-                        pay: pay,
-                        total: total,
-                        items: cart
-                    })
-                }).catch(err => console.log("LINE Send Error:", err));
-            }
-        }
+        // 1. ตรวจสอบว่าด้านบนสุดหรือนอกฟังก์ชันกำหนดตัวแปร URL ไว้ถูกต้องแล้ว
+const LINE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyt9iJPr_E5Z0-p-jC_tayCQx7zMyekr5E6Xx_N6D6txzee4o853kdkc5_hYq8uVT9TuQ/exec";
+
+// 📲 ฟังก์ชันยิงออเดอร์เข้า LINE Webhook
+function sendLineNotify(dine, pay, total) {
+    if (LINE_WEBHOOK_URL && LINE_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbyt9iJPr_E5Z0-p-jC_tayCQx7zMyekr5E6Xx_N6D6txzee4o853kdkc5_hYq8uVT9TuQ/exec") {
+        fetch(LINE_WEBHOOK_URL, {
+            method: 'POST',
+            // เปลี่ยน Header เป็น text/plain เพื่อเลี่ยงการติด CORS Preflight Block ใน Google Apps Script
+            headers: { 
+                'Content-Type': 'text/plain;charset=utf-8' 
+            },
+            body: JSON.stringify({
+                dine: dine,
+                pay: pay,
+                total: total,
+                items: cart
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log("LINE Send Success:", data))
+        .catch(err => console.log("LINE Send Error:", err));
+    } else {
+        console.log(" Error: ยังไม่ได้ใส่ LINE_WEBHOOK_URL");
+    }
+}
 
         function resetAll() {
             cart = [];
